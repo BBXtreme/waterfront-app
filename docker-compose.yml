@@ -13,3 +13,14 @@ services:
       - ./certs:/mosquitto/config/certs:ro
       - ./passwd:/mosquitto/config/passwd:ro
     restart: unless-stopped
+  supabase:
+    image: supabase/supabase:latest
+    container_name: supabase-local
+    ports:
+      - "5432:5432"     # Postgres
+      - "8000:8000"     # Supabase API
+    environment:
+      - POSTGRES_PASSWORD=yourpassword
+    volumes:
+      - ./supabase-data:/var/lib/postgresql/data
+    restart: unless-stopped
