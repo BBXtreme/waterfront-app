@@ -137,7 +137,9 @@ function TestConnectionsPage() {
 
       const result = await withTimeout(supabase.auth.getSession(), 8000);
 
-      if (result.error) throw result.error;
+      if (result.error) {
+        throw result.error;
+      }
 
       setSupabaseStatus({
         status: 'OK',
@@ -165,15 +167,32 @@ function TestConnectionsPage() {
     console.groupEnd();
   };
 
-  const testStripeConnection = () => {
+  const testStripeConnection = async () => {
     setLoading(true);
     setStripeStatus('Pending');
-    setTimeout(() => {
-      setStripeStatus('OK');
-      setStripeResult('Stripe test passed (simulated)');
-      toast.success('Stripe OK');
+
+    try {
+      const response = await withTimeout(
+        fetch('/api/test-stripe', { method: 'GET' }),
+        10000
+      );
+
+      const data = await response.json();
+
+      if (data.success) {
+        setStripeStatus('OK');
+        setStripeResult('Stripe connected successfully');
+        toast.success('Stripe OK');
+      } else {
+        throw new Error(data.message);
+      }
+    } catch (err: any) {
+      setStripeStatus('Error');
+      setStripeResult(err.message || 'Connection failed');
+      toast.error(`Stripe: ${err.message || 'Unknown error'}`);
+    } finally {
       setLoading(false);
-    }, 1400);
+    }
   };
 
   const testBTCPayConnection = async () => {
@@ -181,31 +200,19 @@ function TestConnectionsPage() {
     setBTCPayStatus('Pending');
 
     try {
-      const url = process.env.NEXT_PUBLIC_BTCPAY_URL?.replace(/\/$/, '');
-      const apiKey = process.env.NEXT_PUBLIC_BTCPAY_API_KEY;
-
-      if (!url || !apiKey) {
-        throw new Error('Missing BTCPay URL or API key – check .env.local');
-      }
-
       const response = await withTimeout(
-        fetch(`${url}/api/v1/stores`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `token ${apiKey}`,
-          },
-        }),
+        fetch('/api/test-btcpay', { method: 'GET' }),
         10000
       );
 
-      if (response.ok) {
+      const data = await response.json();
+
+      if (data.success) {
         setBTCPayStatus('OK');
         setBTCPayResult('BTCPay connected successfully');
-        toast.success('BTCPay connection OK');
+        toast.success('BTCPay OK');
       } else {
-        const errorText = await response.text().catch(() => '');
-        throw new Error(`HTTP ${response.status}: ${response.statusText} – ${errorText}`);
+        throw new Error(data.message);
       }
     } catch (err: any) {
       console.error('BTCPay error:', err);

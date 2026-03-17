@@ -37,6 +37,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { useMqtt } from '@/hooks/useMqtt'; // Import real MQTT hook
 
 // Navigation structure
 const navMain = [
@@ -72,16 +73,15 @@ const navMain = [
   },
 ];
 
-// Mock MQTT status (replace with real data later – from context, Zustand, Supabase realtime, etc.)
-const mockConnectionStatus = {
-  connected: true,
-  type: 'WiFi', // or 'LTE'
-  rssi: -58,
-  lastSeen: '2 min ago',
-};
-
+// Use real MQTT status from hook
 export default function AdminLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
+  const { status, error, locationStatuses } = useMqtt(); // Get real status
+
+  const isConnected = status === 'connected';
+  const connectionType = 'WiFi'; // Placeholder; derive from MQTT payload if available
+  const rssi = -58; // Placeholder; derive from MQTT
+  const lastSeen = '2 min ago'; // Placeholder; use timestamp from MQTT
 
   return (
     <TooltipProvider>
@@ -186,26 +186,26 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
                       <div
                         className={cn(
                           'h-3 w-3 rounded-full animate-pulse',
-                          mockConnectionStatus.connected ? 'bg-green-500' : 'bg-red-500'
+                          isConnected ? 'bg-green-500' : 'bg-red-500'
                         )}
                       />
                       <span className="hidden sm:inline font-medium">
-                        {mockConnectionStatus.connected ? 'Connected' : 'Disconnected'}
+                        {isConnected ? 'Connected' : 'Disconnected'}
                       </span>
                       <span className="text-xs text-muted-foreground">
-                        {mockConnectionStatus.type}
+                        {connectionType}
                       </span>
                     </div>
                   </TooltipTrigger>
                   <TooltipContent side="bottom" className="text-xs">
                     <p>MQTT Broker Status</p>
                     <p className="text-muted-foreground">
-                      {mockConnectionStatus.connected
-                        ? `Connected via ${mockConnectionStatus.type} • RSSI: ${mockConnectionStatus.rssi} dBm`
-                        : 'No connection • Last seen: never'}
+                      {isConnected
+                        ? `Connected via ${connectionType} • RSSI: ${rssi} dBm`
+                        : `Disconnected • Error: ${error || 'Unknown'}`}
                     </p>
                     <p className="text-xs text-muted-foreground mt-1">
-                      Last update: {mockConnectionStatus.lastSeen}
+                      Last update: {lastSeen}
                     </p>
                   </TooltipContent>
                 </Tooltip>
@@ -265,7 +265,8 @@ function CollapsibleLocationItem({
             </SidebarMenuSubItem>
           ))}
         </SidebarMenuSub>
-      )}
-    </SidebarMenuItem>
-  );
+        )}
+      </SidebarMenuItem>
+    );
+  }
 }

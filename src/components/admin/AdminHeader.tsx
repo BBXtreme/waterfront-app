@@ -1,13 +1,21 @@
 'use client';
 
 import { createClient } from '@/lib/supabase/client';
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 
 export default function AdminHeader({ email }: { email: string }) {
   const supabase = createClient();
+  const router = useRouter();
 
   const handleLogout = async () => {
-    await supabase.auth.signOut();
-    window.location.href = '/admin/login';
+    try {
+      await supabase.auth.signOut();
+      toast.success('Logged out successfully');
+      router.push('/admin/login');
+    } catch (error: any) {
+      toast.error('Logout failed: ' + error.message);
+    }
   };
 
   return (

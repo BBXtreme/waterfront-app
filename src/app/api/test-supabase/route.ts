@@ -13,11 +13,11 @@ export async function GET() {
     const { data, error } = await supabase.from('mqtt_logs').select('*').limit(1);
     
     if (error) {
-      return NextResponse.json({ success: false, message: error.message });
+      return NextResponse.json({ success: false, message: error.message }, { status: 500 });
     }
     
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ success: true, data });
   } catch (error: any) {
-    return NextResponse.json({ success: false, message: error.message || 'Unknown error' });
+    return NextResponse.json({ success: false, message: error.message || 'Unknown error' }, { status: 500 });
   }
 }

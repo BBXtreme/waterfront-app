@@ -17,9 +17,18 @@ export default function BookingPage() {
   const [date, setDate] = useState('');
   const [time, setTime] = useState('');
   const [kayakType, setKayakType] = useState('single');
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
+
+    // Basic validation
+    if (!name || !email || !date || !time) {
+      toast.error('Please fill in all required fields');
+      setLoading(false);
+      return;
+    }
 
     // Create Supabase client
     const supabase = createClient(
@@ -60,6 +69,8 @@ export default function BookingPage() {
       toast.error('Booking failed', {
         description: error?.message || 'Please try again later.',
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -139,8 +150,8 @@ export default function BookingPage() {
                   <option value="canoe">Canoe</option>
                 </select>
               </div>
-              <Button type="submit" variant="default" size="lg" className="transition-all duration-200 ease-in-out">
-                Submit Booking
+              <Button type="submit" variant="default" size="lg" className="transition-all duration-200 ease-in-out" disabled={loading}>
+                {loading ? 'Submitting...' : 'Submit Booking'}
               </Button>
             </form>
           </CardContent>

@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import { useEffect, useState } from 'react';
 
 export default function ConfirmationPage() {
   const searchParams = useSearchParams();
@@ -14,8 +15,12 @@ export default function ConfirmationPage() {
   const time = searchParams.get('time') || 'N/A';
   const kayakType = searchParams.get('kayakType') || 'N/A';
 
-  // Mock PIN for demo (in real app, generate or fetch from backend)
-  const pinCode = '1234';
+  // Generate a real PIN (4-digit random)
+  const [pinCode, setPinCode] = useState('');
+
+  useEffect(() => {
+    setPinCode(Math.floor(1000 + Math.random() * 9000).toString());
+  }, []);
 
   return (
     <div className="min-h-screen bg-background py-16 px-8">
