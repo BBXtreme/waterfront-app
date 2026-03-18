@@ -2,16 +2,6 @@
 
 @import "tailwindcss";
 
-@custom-variant dark (&:is(.dark *));
-@plugin "daisyui" {
-  themes: false;
-  base: true;
-  styled: true;
-  utils: true;
-  logs: false;
-  radius: var(--radius);          /* ← Improvement: daisyUI buttons/cards/modals use your shadcn --radius (0.5rem) */
-}
-
 /* Custom design tokens as CSS variables – improved consistency with shadcn components */
 :root {
   --background: 0 0% 100%;
