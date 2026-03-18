@@ -28,12 +28,12 @@ import {
   LayoutDashboard,
   CalendarCheck,
   MapPin,
-  PlugZap,
   FileText,
   User,
   LogOut,
   Wifi,
   WifiOff,
+  Settings,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
@@ -47,29 +47,30 @@ const navMain = [
     icon: LayoutDashboard,
   },
   {
+    title: 'Machines',
+    url: '/admin/locations',
+    icon: MapPin,
+    isCollapsible: true,
+    items: [
+      { title: 'All Machines', url: '/admin/locations' },
+      { title: 'Add New Machine', url: '/admin/locations/new' },
+    ],
+  },
+  {
     title: 'Bookings',
     url: '/admin/bookings',
     icon: CalendarCheck,
   },
   {
-    title: 'Locations',
-    icon: MapPin,
-    isCollapsible: true,
-    items: [
-      { title: 'All Locations', url: '/admin/locations' },
-      { title: 'Add New Location', url: '/admin/locations/new' },
-    ],
-  },
-  {
-    title: 'Connections',
-    url: '/admin/connections',
-    icon: PlugZap,
-  },
-  {
-    title: 'Logs',
+    title: 'Telemetry',
     url: '/admin/logs',
     icon: FileText,
     accent: true,
+  },
+  {
+    title: 'Settings',
+    url: '/admin/settings',
+    icon: Settings,
   },
 ];
 
