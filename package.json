@@ -2,13 +2,17 @@
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
-  "scripts": {
-    "dev": "TURBOPACK=0 next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
-    "test": "vitest"
-  },
+ "scripts": {
+  "dev": "TURBOPACK=0 next dev",
+  "build": "next build",
+  "start": "next start",
+  "test": "vitest",
+  "type-check": "tsc --noEmit",
+  "lint": "biome lint .",
+  "format": "biome format --write .",
+  "check": "biome check --write .",
+  "ci": "biome ci . && pnpm type-check && pnpm test --run"
+},
   "dependencies": {
     "@supabase/ssr": "^0.8.0",
     "@supabase/supabase-js": "^2.98.0",
@@ -27,10 +31,11 @@
     "react-hook-form": "^7.53.2",
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.5.0",
-    "zustand": "^5.0.2",
-    "zod": "^3.23.8"
+    "zod": "^3.23.8",
+    "zustand": "^5.0.2"
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.4.7",
     "@tailwindcss/postcss": "^4.0.0-alpha.35",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
