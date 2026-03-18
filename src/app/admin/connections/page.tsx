@@ -1,3 +1,6 @@
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+
 export default function AdminConnectionsPage() {
   return (
     <div className="min-h-screen bg-background p-8">

@@ -1,3 +1,5 @@
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+
 export default function AdminLoginPage() {
   return (
     <div className="min-h-screen bg-background p-8">

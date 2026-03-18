@@ -1,3 +1,6 @@
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+
 export default function AdminLogsPage() {
   return (
     <div className="min-h-screen bg-background p-8">

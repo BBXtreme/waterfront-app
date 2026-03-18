@@ -266,8 +266,7 @@ function CollapsibleLocationItem({
             </SidebarMenuSubItem>
           ))}
         </SidebarMenuSub>
-        )}
-      </SidebarMenuItem>
-    );
-  }
+      )}
+    </SidebarMenuItem>
+  );
 }
